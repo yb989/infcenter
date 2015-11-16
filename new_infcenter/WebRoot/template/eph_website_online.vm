@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>亿谱汇动态详细页</title>
+<link rel="stylesheet" type="text/css" href="${column_url}css/style.css" />
+</head>
+
+<body>
+<div class="scroll" id="scroll" style="display:none;">
+	<img alt="" src="${column_url}images/return_top.png">
+</div>
+<div class="top_public_one">
+	<div class="box_width1000 div_box_clea">
+		<div class="top_public_one_right">
+			<!--下拉菜单-->
+			<ul id="navmenu">
+				<li style="display: none;" class="zhuce_box"><a>登录</a></li>
+				<li><a>我的账户</a></li>
+				<li><a>帮助中心</a></li>
+				<li><a>联系我们</a></li>
+				<li style="display: none;" class="userName_box">
+					<div>
+						欢迎您 <span id="nickNameSpan"></span> &nbsp;|&nbsp;&nbsp;<a href="javascript:void(0);" onclick="logout();">[退出]</a>
+					</div>
+				</li>
+			</ul>
+			<!--end 下拉菜单test-->
+		</div>
+
+		<div class="top_public_one_left">
+			<span class="photo_400">400-010-1077</span> <a href="javascript:void(0);" class="weixin concernme">关注我们</a>
+			<div class="float_box">
+				<img src="${column_url}images/top-erweima.png" />
+			</div>
+		</div>
+	</div>
+</div>	
+	<div class="header_nav_box">
+		<div class="header_logo_box box_width1000">
+			<!--菜单信息-->
+			<div class="header_navmenu">
+				<ul>
+					<li><a href="${column_url}index.html" id="index_curr">首页</a></li>
+					<li><a href="${column_url}product/productlist" id="pro_curr">我要理财</a></li>
+					<li><a href="${column_url}platformIntro.html" id="platform_curr">平台介绍</a></li>
+					<li><a href="${column_url}security.html" id="security_curr">安全保障</a></li>
+				</ul>
+			</div>
+			<a href="${column_url}index.html"><img src="${column_url}images/top_logo.gif" class="header_logo"></a>
+		</div>
+	</div>
+
+
+<!-- 中间部分 -->
+<div class="company_box box_width1000">
+		<!-- 左菜单栏 -->
+	 	<div class="news_nav_list">
+		    <ul> 
+		      	#foreach($InfcenterPilot in $secondPilot)
+					#if($InfcenterPilot.highlight == "1")
+						<li><a class="news_focus">$InfcenterPilot.columnZhName</a></li>
+					#else
+		   				 <li><a>$InfcenterPilot.columnZhName</a></li>
+					#end
+     			 #end
+		    </ul>
+	  	</div>
+ 		<!-- 内容部分 -->
+		<div class="news_con_page">
+			#if($isNews == "1")
+      			<div class="page_txt_box">
+			     	<h1>
+						#if($title)
+	      					${title}
+	      				#end
+					</h1>
+					<span>
+						#if($publish_time)
+	      					${publish_time}
+	      				#end
+					</span>
+				</div>
+				<div class="page_con_box">${text}</div>
+			#else
+				<div class="page_con_box">
+			       	<h3 class="link_h3 font-008fcf" id="newsTitle">
+						#if($title)
+	      					${title}
+	      				#end
+					</h3>
+			       	<div id="newsContent">
+			       		${text}
+			      	</div>
+		   		 </div>
+      		#end
+		</div>
+</div>
+
+<div class="index_footer_box">
+  <div class="box_width1000 div_box_clear">
+    <div class="footer_link_box ">
+      <ul class="div_box_clear">
+        <li>
+          <h2>关于我们</h2><br />
+          <a href="${column_url}companyIntro.html">公司简介</a><br />
+          <a href="${column_url}companyHonor.html">企业荣誉</a><br />
+          <a href="${column_url}contactus.html">联系我们</a><br />
+          <a href="${column_url}partner.html">合作伙伴</a><br />
+        </li>
+        <li>
+          <h2>安全保障</h2><br />
+          <a href="${column_url}securityz.html#zjaq">资金安全</a><br />
+          <a href="${column_url}securityx.html#xxaq">信息安全</a><br />
+          <a href="${column_url}securityf.html#fktx">风控体系</a><br />
+        </li>
+        <li>
+          <h2>帮助中心</h2><br />
+          <a href="${column_url}helpQue.html#question">常见问题</a><br />
+          <a href="${column_url}helpDes.html#description">费用说明</a><br />
+        </li>
+      </ul>
+    </div>
+    <div class="footer_guanzhu_box">
+      <dd class="footer_weixin_dd_box">
+        <h6>关注微信</h6>
+        <img src="${column_url}images/top-erweima.png">
+      </dd>
+      <dd class="footer_dianhua_dd_box">
+        <h6>全国财富热线：</h6>
+        <p>400-010-1077</p>
+        <span>周一至周五 工作时间  9:30-18:30</span>
+      </dd>
+    </div>
+    <div class="footer_address_box">
+      <h6>版权所有：</h6><br /><br />
+亿谱汇财富投资管理（北京）有限公司<br /><br />
+备案序号：京ICP备14056170号
+    </div>
+  </div>
+  <div class="box_width1000 div_box_clear footer_bottom_logo">
+    <a href="http://www.itrust.org.cn/yz/pjwx.asp?wm=1590635785" target="_blank" rel="nofollow" title="网信认证" class="footer_biao1"></a>
+    <a href="https://sealinfo.verisign.com/splash?form_file=fdf/splash.fdf&dn=www.ephwealth.com&lang=zh_cn" target="_blank" rel="nofollow" title="VeriSign加密服务" class="footer_biao2"></a>
+    <a href="https://ss.knet.cn/verifyseal.dll?sn=e15061711010559125jtki000000&comefrom=trust&trustKey=dn&trustValue=www.ephwealth.com" target="_blank" rel="nofollow" title="可信网站"  class="footer_biao3"></a>
+    <a href="https://search.szfw.org/cert/l/CX20150608010257010805" target="_blank" rel="nofollow" title="诚信网站" class="footer_biao4"></a>
+    <a href="http://v.pinpaibao.com.cn/authenticate/cert/?site=www.ephwealth.com&at=business" target="_blank" rel="nofollow" title="安全联盟信誉档案库"  class="footer_biao6"></a>
+    <!-- <a href="http://webscan.360.cn/index/checkwebsite/url/p2p.ephwealth.com" target="_blank" rel="nofollow" title="360网站安全监测"  class="footer_biao7"></a>-->  
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yph.infcenter.mapper.InfcenterCarouselMapper">	
+	
+	  <!-- 首页轮播图分页列表查询条件 -->
+  	  <sql id="dynamicPageWhere">
+  	  	<if test="websiteId != null and websiteId != '--请选择--' ">
+	       	and c.website_id = #{websiteId}
+	    </if>
+	    <if test="isEffective != null and isEffective != '--请选择--' ">
+	       	and c.is_effective = #{isEffective}
+	    </if>	    
+	    <if test="beginTimeBegin != null and beginTimeBegin != '' ">
+	    	<![CDATA[and c.begin_time >= CONCAT(#{beginTimeBegin},' 00:00:00') ]]>
+	    </if>
+	    <if test="beginTimeEnd != null and beginTimeEnd != '' ">
+	    	<![CDATA[and c.begin_time <= CONCAT(#{beginTimeEnd},' 23:59:59') ]]>
+	    </if>
+	    <if test="endTimeBegin != null and endTimeBegin != '' ">
+	    	<![CDATA[and c.end_time >= CONCAT(#{endTimeBegin},' 00:00:00') ]]>
+	    </if>
+	    <if test="endTimeEnd != null and endTimeEnd != '' ">
+	    	<![CDATA[and c.end_time <= CONCAT(#{endTimeEnd},' 23:59:59') ]]>
+	    </if>
+	  		    	    	   	    	      
+  	  </sql>
+	
+	  <!-- 分页查询首页轮播图列表 -->
+	  <select id="findAllRetMapByPage" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			c.id,
+			c.file_url,
+			c.url,
+			p.column_zh_name website_id,
+			c.is_effective,
+			c.begin_time,
+			c.end_time,
+			e.name operator,
+			c.operate_time
+		FROM
+			eph_infcenter_carousel c
+		INNER JOIN eph_public_employee e ON e.employee_id = c.operator
+		INNER JOIN eph_infcenter_pilot p on p.id = c.website_id
+		where 1 = 1
+		<include refid="dynamicPageWhere"/>
+		order by c.begin_time desc
+		limit #{startIndex},#{pageSize}
+	  </select>
+	
+	  <!-- 信息栏目列表分页总数 -->  
+	  <select id="findAllByPageCount" resultType="long" parameterType="hashmap">
+	  	SELECT 
+	  		count(c.id) 
+	  	FROM eph_infcenter_carousel c
+	  	INNER JOIN eph_public_employee e ON e.employee_id = c.operator
+	  	INNER JOIN eph_infcenter_pilot p on p.id = c.website_id
+		WHERE 1 = 1
+		<include refid="dynamicPageWhere"/>
+	  </select>
+	
+	  <insert id="insertSelective" parameterType="com.yph.infcenter.entity.InfcenterCarousel" useGeneratedKeys="true" keyProperty="id">
+    	insert into eph_infcenter_carousel
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        id,
+	      </if>
+	      <if test="fileUrl != null" >
+	        file_url,
+	      </if>
+	      <if test="url != null" >
+	        url,
+	      </if>
+	      <if test="websiteId != null" >
+	        website_id,
+	      </if>
+	      <if test="isEffective != null" >
+	        is_effective,
+	      </if>	      
+	      <if test="beginTime != null" >
+	        begin_time,
+	      </if>
+	      <if test="endTime != null" >
+	        end_time,
+	      </if>
+	      <if test="operator != null" >
+	        operator,
+	      </if>      
+	      <if test="operateTime != null" >
+	        operate_time,
+	      </if>   	      	      
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        #{id,jdbcType=INTEGER},
+	      </if>
+	      <if test="fileUrl != null" >
+	        #{fileUrl,jdbcType=VARCHAR},
+	      </if>
+	      <if test="url != null" >
+	        #{url,jdbcType=VARCHAR},
+	      </if>
+	      <if test="websiteId != null" >
+	        #{websiteId,jdbcType=INTEGER},
+	      </if>
+	      <if test="isEffective != null" >
+	        #{isEffective,jdbcType=CHAR},
+	      </if> 
+	      <if test="beginTime != null" >
+	        #{beginTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="endTime != null" >
+	        #{endTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="operator != null" >
+	        #{operator,jdbcType=INTEGER},
+	      </if>      
+	      <if test="operateTime != null" >
+	        #{operateTime,jdbcType=TIMESTAMP},
+	      </if>      	      	          
+	    </trim>
+  	  </insert>
+  	  
+      <update id="updateByPrimaryKeySelective" parameterType="com.yph.infcenter.entity.InfcenterCarousel" >
+	    update eph_infcenter_carousel
+	    <set>
+	      <if test="fileUrl != null" >
+	        file_url = #{fileUrl,jdbcType=VARCHAR},
+	      </if>
+	      <if test="url != null" >
+	        url = #{url,jdbcType=VARCHAR},
+	      </if>
+	      <if test="websiteId != null" >
+	        website_id = #{websiteId,jdbcType=INTEGER},
+	      </if>
+	      <if test="isEffective != null" >
+	        is_effective = #{isEffective,jdbcType=CHAR},
+	      </if>
+	      <if test="beginTime != null" >
+	        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="endTime != null" >
+	        end_time = #{endTime,jdbcType=TIMESTAMP },
+	      </if>
+	      <if test="operator != null" >
+	        operator = #{operator,jdbcType=INTEGER},
+	      </if>     
+	      <if test="operateTime != null" >
+	        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+	      </if>            	      	      
+	    </set>
+	    where id = #{id,jdbcType=INTEGER}
+      </update>
+	  
+	  <!-- 查看轮播图,返回map类型 -->
+	  <select id="selectRetMapByPrimaryKey" parameterType="java.lang.Integer" resultType="hashmap">
+	   SELECT
+			c.id,
+			c.file_url,
+			c.url,
+			c.website_id,
+			c.is_effective,
+			c.begin_time,
+			c.end_time,
+			e.name operator,
+			c.operate_time
+		FROM
+			eph_infcenter_carousel c
+		INNER JOIN eph_public_employee e ON e.employee_id = c.operator
+	    WHERE c.id = #{id,jdbcType=INTEGER}
+	  </select>
+	  	  
+	  <!-- 20151030 dyp 新增查询网站BANNER -->
+	  <select id="queryBannerToOnline" parameterType="hashmap" resultType="map">
+	   SELECT
+			c.file_url imgUrl,c.url
+		FROM
+			eph_infcenter_carousel c
+		WHERE
+			c.website_id = #{websiteId,jdbcType=INTEGER}
+		AND c.is_effective = 1
+		AND NOW() BETWEEN c.begin_time
+		AND c.end_time
+		ORDER BY operate_time desc
+		LIMIT #{size,jdbcType=INTEGER}
+	  </select>	  
+	  
+</mapper>

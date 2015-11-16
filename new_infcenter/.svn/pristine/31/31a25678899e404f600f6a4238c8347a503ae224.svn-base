@@ -1,0 +1,9 @@
+#infcenter datasource config
+#jdbc.username=root
+#jdbc.password=123456
+#jdbc.url=jdbc\:mysql\://192.168.0.121/infcenter?useUnicode\=true&characterEncoding\=UTF-8&noAccessToProcedureBodies\=true
+
+jdbc.username=daiyanping
+jdbc.password=azAZ123@dyp
+jdbc.url=jdbc\:mysql\://192.168.0.231/infcenter?useUnicode\=true&characterEncoding\=UTF-8&noAccessToProcedureBodies\=true
+

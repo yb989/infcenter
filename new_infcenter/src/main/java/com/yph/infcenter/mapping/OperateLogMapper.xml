@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yph.infcenter.mapper.OperateLogMapper" >
+  <resultMap id="BaseResultMap" type="com.yph.infcenter.entity.OperateLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="business_object_id" property="businessObjectId" jdbcType="INTEGER" />
+    <result column="business_object_table" property="businessObjectTable" jdbcType="VARCHAR" />
+    <result column="business_object_name" property="businessObjectName" jdbcType="VARCHAR" />
+    <result column="operate_type" property="operateType" jdbcType="VARCHAR" />
+    <result column="change_old" property="changeOld" jdbcType="VARCHAR" />
+    <result column="change_new" property="changeNew" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="INTEGER" />
+    <result column="oper_time" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, business_object_id, business_object_table, business_object_name, operate_type, 
+    change_old, change_new, operator, oper_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from eph_public_operate_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from eph_public_operate_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yph.infcenter.entity.OperateLog" >
+    insert into eph_public_operate_log (id, business_object_id, business_object_table, 
+      business_object_name, operate_type, change_old, 
+      change_new, operator, oper_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{businessObjectId,jdbcType=INTEGER}, #{businessObjectTable,jdbcType=VARCHAR}, 
+      #{businessObjectName,jdbcType=VARCHAR}, #{operateType,jdbcType=VARCHAR}, #{changeOld,jdbcType=VARCHAR}, 
+      #{changeNew,jdbcType=VARCHAR}, #{operator,jdbcType=INTEGER}, #{operTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yph.infcenter.entity.OperateLog" >
+    insert into eph_public_operate_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="businessObjectId != null" >
+        business_object_id,
+      </if>
+      <if test="businessObjectTable != null" >
+        business_object_table,
+      </if>
+      <if test="businessObjectName != null" >
+        business_object_name,
+      </if>
+      <if test="operateType != null" >
+        operate_type,
+      </if>
+      <if test="changeOld != null" >
+        change_old,
+      </if>
+      <if test="changeNew != null" >
+        change_new,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="operTime != null" >
+        oper_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="businessObjectId != null" >
+        #{businessObjectId,jdbcType=INTEGER},
+      </if>
+      <if test="businessObjectTable != null" >
+        #{businessObjectTable,jdbcType=VARCHAR},
+      </if>
+      <if test="businessObjectName != null" >
+        #{businessObjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateType != null" >
+        #{operateType,jdbcType=VARCHAR},
+      </if>
+      <if test="changeOld != null" >
+        #{changeOld,jdbcType=VARCHAR},
+      </if>
+      <if test="changeNew != null" >
+        #{changeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yph.infcenter.entity.OperateLog" >
+    update eph_public_operate_log
+    <set >
+      <if test="businessObjectId != null" >
+        business_object_id = #{businessObjectId,jdbcType=INTEGER},
+      </if>
+      <if test="businessObjectTable != null" >
+        business_object_table = #{businessObjectTable,jdbcType=VARCHAR},
+      </if>
+      <if test="businessObjectName != null" >
+        business_object_name = #{businessObjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateType != null" >
+        operate_type = #{operateType,jdbcType=VARCHAR},
+      </if>
+      <if test="changeOld != null" >
+        change_old = #{changeOld,jdbcType=VARCHAR},
+      </if>
+      <if test="changeNew != null" >
+        change_new = #{changeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="operTime != null" >
+        oper_time = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yph.infcenter.entity.OperateLog" >
+    update eph_public_operate_log
+    set business_object_id = #{businessObjectId,jdbcType=INTEGER},
+      business_object_table = #{businessObjectTable,jdbcType=VARCHAR},
+      business_object_name = #{businessObjectName,jdbcType=VARCHAR},
+      operate_type = #{operateType,jdbcType=VARCHAR},
+      change_old = #{changeOld,jdbcType=VARCHAR},
+      change_new = #{changeNew,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=INTEGER},
+      oper_time = #{operTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

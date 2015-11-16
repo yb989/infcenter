@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yph.infcenter.mapper.InterfaceLogMapper" >
+  <resultMap id="BaseResultMap" type="com.yph.infcenter.entity.InterfaceLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="system_identifying" property="systemIdentifying" jdbcType="VARCHAR" />
+    <result column="interfase_description" property="interfaseDescription" jdbcType="VARCHAR" />
+    <result column="interfase_data" property="interfaseData" jdbcType="VARCHAR" />
+    <result column="oper_state" property="operState" jdbcType="VARCHAR" />
+    <result column="is_call_back" property="isCallBack" jdbcType="CHAR" />
+    <result column="oper_time" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, system_identifying, interfase_description, interfase_data, oper_state, is_call_back, 
+    oper_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from eph_public_interface_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from eph_public_interface_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yph.infcenter.entity.InterfaceLog" >
+    insert into eph_public_interface_log (id, system_identifying, interfase_description, 
+      interfase_data, oper_state, is_call_back, 
+      oper_time)
+    values (#{id,jdbcType=INTEGER}, #{systemIdentifying,jdbcType=VARCHAR}, #{interfaseDescription,jdbcType=VARCHAR}, 
+      #{interfaseData,jdbcType=VARCHAR}, #{operState,jdbcType=VARCHAR}, #{isCallBack,jdbcType=CHAR}, 
+      #{operTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yph.infcenter.entity.InterfaceLog" >
+    insert into eph_public_interface_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="systemIdentifying != null" >
+        system_identifying,
+      </if>
+      <if test="interfaseDescription != null" >
+        interfase_description,
+      </if>
+      <if test="interfaseData != null" >
+        interfase_data,
+      </if>
+      <if test="operState != null" >
+        oper_state,
+      </if>
+      <if test="isCallBack != null" >
+        is_call_back,
+      </if>
+      <if test="operTime != null" >
+        oper_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="systemIdentifying != null" >
+        #{systemIdentifying,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaseDescription != null" >
+        #{interfaseDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaseData != null" >
+        #{interfaseData,jdbcType=VARCHAR},
+      </if>
+      <if test="operState != null" >
+        #{operState,jdbcType=VARCHAR},
+      </if>
+      <if test="isCallBack != null" >
+        #{isCallBack,jdbcType=CHAR},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yph.infcenter.entity.InterfaceLog" >
+    update eph_public_interface_log
+    <set >
+      <if test="systemIdentifying != null" >
+        system_identifying = #{systemIdentifying,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaseDescription != null" >
+        interfase_description = #{interfaseDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaseData != null" >
+        interfase_data = #{interfaseData,jdbcType=VARCHAR},
+      </if>
+      <if test="operState != null" >
+        oper_state = #{operState,jdbcType=VARCHAR},
+      </if>
+      <if test="isCallBack != null" >
+        is_call_back = #{isCallBack,jdbcType=CHAR},
+      </if>
+      <if test="operTime != null" >
+        oper_time = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yph.infcenter.entity.InterfaceLog" >
+    update eph_public_interface_log
+    set system_identifying = #{systemIdentifying,jdbcType=VARCHAR},
+      interfase_description = #{interfaseDescription,jdbcType=VARCHAR},
+      interfase_data = #{interfaseData,jdbcType=VARCHAR},
+      oper_state = #{operState,jdbcType=VARCHAR},
+      is_call_back = #{isCallBack,jdbcType=CHAR},
+      oper_time = #{operTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

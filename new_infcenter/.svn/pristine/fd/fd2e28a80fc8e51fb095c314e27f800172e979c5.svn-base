@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yph.infcenter.mapper.InfcenterInformationMapper">
+<!-- 间隔24小时刷新一次 -->
+<cache type="PERPETUAL" eviction="LRU" flushInterval="86400000" readOnly="true" size="4096"/>
+
+	  <!-- 分页查询详情记录列表条件 -->
+	  <resultMap id="BaseResultMap" type="com.yph.infcenter.entity.InfcenterInformation" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="title" property="title" jdbcType="VARCHAR" />
+	    <result column="info_sources" property="infoSources" jdbcType="VARCHAR" />
+	    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+	    <result column="encode_file_name" property="encodeFileName" jdbcType="VARCHAR" />
+	    <result column="text" property="text" jdbcType="VARCHAR" />
+	    <result column="operator" property="operator" jdbcType="INTEGER" />
+	    <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+	    <result column="clicks" property="clicks" jdbcType="INTEGER" />
+	    <result column="velocity_name" property="velocityName" jdbcType="VARCHAR" />
+	    <result column="website_id" property="websiteId" jdbcType="INTEGER" />
+	    <result column="first_level_id" property="firstLevelId" jdbcType="INTEGER" />
+	    <result column="second_level_id" property="secondLevelId" jdbcType="INTEGER" />
+	    <result column="third_level_id" property="thirdLevelId" jdbcType="INTEGER" />
+	    <result column="fourth_level_id" property="fourthLevelId" jdbcType="INTEGER" />
+	    <result column="is_effective" property="isEffective" jdbcType="CHAR" />
+	    <result column="is_top" property="isTop" jdbcType="CHAR" />
+	    <result column="describition" property="describition" jdbcType="VARCHAR" />
+	  </resultMap>
+	  <sql id="Base_Column_List" >
+	    id, title, info_sources, file_name, text, operator, operate_time, clicks, velocity_name, website_id, first_level_id, second_level_id, third_level_id, fourth_level_id, is_effective 
+	  </sql>
+	  
+	  <!-- 分页查询行业新闻记录列表条件 -->
+	  <sql id="dynamicPageWhere">
+		<if test="title != null and title.length()>0"> and eii.title like '${title}%' </if>
+		<if test="infoSources != null and infoSources.length()>0 "> and eii.info_sources = #{infoSources}</if>
+		<if test="isEffective != null and isEffective.length()>0"> and eii.is_effective = #{isEffective}</if>
+		<if test="fileName != null and fileName.length()>0"> and eii.file_name = #{fileName} </if>
+		<if test="columnZhName1 !=null and columnZhName1.length()>0"> and eii.website_id = #{columnZhName1}</if>
+		<if test="columnZhName2 !=null and columnZhName2.length()>0"> and eii.first_level_id = #{columnZhName2}</if>
+		<if test="columnZhName3 !=null and columnZhName3.length()>0"> and eii.second_level_id = #{columnZhName3}</if>
+	  </sql>
+	  
+	  <!--增加详情页面  -->
+	  <insert id="insertSelective" parameterType="InfcenterInformation" useGeneratedKeys="true" keyProperty="id">
+  		insert into eph_infcenter_information 
+	   	<trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="id != null" >
+	        id,
+	      </if>
+	      <if test="title != null" >
+	        title,
+	      </if>
+	      <if test="infoSources != null" >
+	        info_sources,
+	      </if>
+	      <if test="fileName != null" >
+	        file_name,
+	      </if>
+	      <if test="encodeFileName != null" >
+	        encode_file_name,
+	      </if>
+	      <if test="velocityName != null" >
+	        velocity_name,
+	      </if>
+	      <if test="clicks != null" >
+	        clicks,
+	      </if>
+	      <if test="operator != null" >
+	        operator,
+	      </if>
+	      <if test="operateTime != null" >
+	        operate_time,
+	      </if>
+	      <if test="isEffective != null" >
+	        is_effective,
+	      </if>
+	      <if test="text != null" >
+	        text,
+	      </if>
+	      <if test="websiteId != null" >
+	        website_id,
+	      </if>
+	      <if test="firstLevelId != null" >
+        	first_level_id,
+		 </if>
+	      <if test="secondLevelId != null" >
+	        second_level_id,
+		 </if>
+		 <if test="isTop != null" >
+	        is_top,
+		 </if>
+		 <if test="isIndex != null" >
+		    isIndex,
+		  </if>
+		  <if test="indexUrl != null" >
+		    indexUrl,
+		  </if>
+		  <if test="describition != null" >
+		    describition,
+		  </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+		    #{id,jdbcType=INTEGER},
+		  </if>
+	      <if test="title != null" >
+	        #{title,jdbcType=VARCHAR},
+	      </if>
+	      <if test="infoSources != null" >
+	        #{infoSources,jdbcType=VARCHAR},
+	      </if>
+	      <if test="fileName != null" >
+	        #{fileName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="encodeFileName != null" >
+	        #{encodeFileName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="velocityName != null" >
+	        #{velocityName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="clicks != null" >
+	        #{clicks,jdbcType=INTEGER},
+	      </if>
+	      <if test="operator != null" >
+	        #{operator,jdbcType=INTEGER},
+	      </if>
+	      <if test="operateTime != null" >
+	        #{operateTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="isEffective != null" >
+	        #{isEffective,jdbcType=CHAR},
+	      </if>
+	      <if test="text != null" >
+	        #{text,jdbcType=VARCHAR},
+	      </if>
+	      <if test="websiteId != null" >
+		    #{websiteId,jdbcType=INTEGER},
+		  </if>
+		  <if test="firstLevelId != null" >
+		    #{firstLevelId,jdbcType=INTEGER},
+		  </if>
+		  <if test="secondLevelId != null" >
+		    #{secondLevelId,jdbcType=INTEGER},
+		  </if>
+		  <if test="isTop != null" >
+		    #{isTop,jdbcType=CHAR},
+		  </if>
+		  <if test="isIndex != null" >
+		    #{isIndex,jdbcType=CHAR},
+		  </if>
+		  <if test="indexUrl != null" >
+		    #{indexUrl,jdbcType=VARCHAR},
+		  </if>
+		  <if test="describition != null" >
+		    #{describition,jdbcType=VARCHAR},
+		  </if>
+	    </trim>
+  	</insert>
+  	
+  	<!--修改详情页面  -->
+    <update id="updateByPrimaryKeySelective" parameterType="com.yph.infcenter.entity.InfcenterInformation" >
+    update eph_infcenter_information
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="infoSources != null" >
+        info_sources = #{infoSources,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="encodeFileName != null" >
+        encode_file_name = #{encodeFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="velocityName != null" >
+        velocity_name = #{velocityName,jdbcType=VARCHAR},
+      </if>
+      <if test="clicks != null" >
+        clicks = #{clicks,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="operateTime != null" >
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isEffective != null" >
+        is_effective = #{isEffective,jdbcType=CHAR},
+      </if>
+      <if test="text != null" >
+        text = #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="websiteId != null" >
+        website_id = #{websiteId,jdbcType=INTEGER},
+      </if>
+      <if test="firstLevelId != null" >
+        first_level_id = #{firstLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="secondLevelId != null" >
+        second_level_id = #{secondLevelId,jdbcType=INTEGER},
+      </if>
+       <if test="isTop != null" >
+        is_top = #{isTop,jdbcType=CHAR},
+      </if>
+      <if test="isIndex != null" >
+		    isIndex=#{isIndex,jdbcType=CHAR},
+	 </if>
+	 <if test="indexUrl != null" >
+		    indexUrl=#{indexUrl,jdbcType=VARCHAR},
+	 </if>
+	 <if test="describition != null" >
+		    describition=#{describition,jdbcType=VARCHAR},
+	 </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <!--根据Id查询实体对象 -->
+   <select id="selectRetMapByPrimaryKey" parameterType="java.lang.Integer" resultType="hashmap">
+    SELECT
+        e.isIndex,
+		e.indexUrl,
+    	e.id,
+		e.title,
+		e.info_sources,
+		e.file_name,
+		e.clicks,
+		e.operator,
+		e.operate_time,
+		e.is_effective,
+		e.text,
+		e.velocity_name,
+		e.website_id,
+		e.first_level_id,
+		e.second_level_id,
+		e.is_top,
+		eip1.column_zh_name first_name,
+		eip2.column_zh_name seconde_name,
+		eip3.column_zh_name thread_name,
+		eip4.column_zh_name fourth_name,
+		eip5.column_zh_name fifty_name,
+		e.indexUrl indexUrl,
+		e.describition
+	FROM eph_infcenter_information e
+	LEFT JOIN eph_infcenter_pilot eip1 ON eip1.id = e.website_id
+	LEFT JOIN eph_infcenter_pilot eip2 ON eip2.id = e.first_level_id
+	LEFT JOIN eph_infcenter_pilot eip3 ON eip3.id = e.second_level_id
+	LEFT JOIN eph_public_employee eie ON eie.employee_id = e.operator
+	LEFT JOIN eph_infcenter_pilot eip4 ON eip4.id = e.third_level_id
+	LEFT JOIN eph_infcenter_pilot eip5 ON eip5.id = e.fourth_level_id
+    WHERE e.id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 分页查询详情记录列表 -->
+  <select id="findAllInfcenterInformationMapByPage" parameterType="hashmap" resultType="hashmap">
+	  SELECT
+		eii.id,
+		eii.title,
+		eii.info_sources,
+	  	CONCAT(
+		      CASE when eip1.column_url is null then '' else eip1.column_url end,
+		      CONCAT("/exhibition/page/",TRIM(eii.encode_file_name))
+    	)url,
+		eii.text,
+		eii.clicks,
+		eie.`name` operator,
+		eii.operate_time,
+		eii.is_effective,
+		eii.is_top,
+		eip1.column_zh_name first_name,
+		eip2.column_zh_name seconde_name,
+		eip3.column_zh_name thread_name,
+		eip4.column_zh_name fourth_name,
+		eip5.column_zh_name fifty_name
+		FROM
+			eph_infcenter_information eii
+		LEFT JOIN eph_infcenter_pilot eip1 ON eip1.id = eii.website_id
+		LEFT JOIN eph_infcenter_pilot eip2 ON eip2.id = eii.first_level_id
+		LEFT JOIN eph_infcenter_pilot eip3 ON eip3.id = eii.second_level_id
+		LEFT JOIN eph_public_employee eie ON eie.employee_id = eii.operator
+		LEFT JOIN eph_infcenter_pilot eip4 ON eip4.id = eii.third_level_id
+		LEFT JOIN eph_infcenter_pilot eip5 ON eip5.id = eii.fourth_level_id
+		where 1=1
+    	<include refid="dynamicPageWhere"/>
+    	order by eii.operate_time desc
+		limit #{startIndex},#{pageSize}
+  </select>
+  
+  <!--分页查询详情页总记录数  -->
+  <select id="findAllInfcenterInformationByPageCount" resultType="long" parameterType="hashmap">
+		SELECT
+			count(eii.id)
+		FROM
+			eph_infcenter_information eii
+		INNER JOIN eph_infcenter_pilot eip1 ON eip1.id = eii.website_id
+		INNER JOIN eph_infcenter_pilot eip2 ON eip2.id = eii.first_level_id
+		INNER JOIN eph_infcenter_pilot eip3 ON eip3.id = eii.second_level_id
+		INNER JOIN eph_public_employee eie ON eie.employee_id = eii.operator
+		LEFT JOIN eph_infcenter_pilot eip4 ON eip4.id = eii.third_level_id
+		LEFT JOIN eph_infcenter_pilot eip5 ON eip5.id = eii.fourth_level_id
+		where 1=1
+    	<include refid="dynamicPageWhere"/>
+  </select>
+	
+  <!-- 根据主键查询站点文件保存路径，模板名称，访问地址信息 -->
+  <select id="findWebsitInfoById" parameterType="int" resultType="hashmap">
+  	select 
+		eip1.page_save_path webPath,
+	    eip2.page_save_path firstPath,
+	    eip3.page_save_path secondPath,
+	    eip4.page_save_path thirdPath,
+	    eip5.page_save_path fourthPath,
+        eii.file_name fileName,
+	    eip3.velocity_name velocityName,
+	    eip1.column_url columnUrl
+	 from eph_infcenter_information eii
+	left JOIN eph_infcenter_pilot eip1 on eii.website_id = eip1.id
+	left JOIN eph_infcenter_pilot eip2 on eii.first_level_id = eip2.id
+	left JOIN eph_infcenter_pilot eip3 on eii.second_level_id = eip3.id
+	left JOIN eph_infcenter_pilot eip4 on eii.third_level_id = eip4.id
+	left JOIN eph_infcenter_pilot eip5 on eii.fourth_level_id = eip5.id
+    where eii.id = #{id}
+  </select>
+  
+  <!-- 根据主键查询页面信息 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select 
+    <include refid="Base_Column_List" />
+    from eph_infcenter_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据各栏目编号，查询页面存储基本信息文件保存路径，模板名称，访问地址 -->
+  <select id="findWebsitInfoByColumnId" parameterType="hashmap" resultType="hashmap">
+  	SELECT
+  	    CASE when eip.velocity_name is null then '' else eip.velocity_name end v1,
+  	    CASE when eip1.velocity_name is null then '' else eip1.velocity_name end v2,
+  	    CASE when eip2.velocity_name is null then '' else eip2.velocity_name end v3,
+  	    CASE when eip3.velocity_name is null then '' else eip3.velocity_name end v4,
+  	    CASE when eip4.velocity_name is null then '' else eip4.velocity_name end v5,
+  	    CASE when eip.column_url is null then '' else eip.column_url end c1,
+  	    CASE when eip1.column_url is null then '' else eip1.column_url end c2,
+  	    CASE when eip2.column_url is null then '' else eip2.column_url end c3,
+  	    CASE when eip3.column_url is null then '' else eip3.column_url end c4,
+  	    CASE when eip4.column_url is null then '' else eip4.column_url end c5,
+  	    CASE when eip.page_save_path is null then '' else eip.page_save_path end p1,
+  	    CASE when eip1.page_save_path is null then '' else eip1.page_save_path end p2,
+  	    CASE when eip2.page_save_path is null then '' else eip2.page_save_path end p3,
+  	    CASE when eip3.page_save_path is null then '' else eip3.page_save_path end p4,
+  	    CASE when eip4.page_save_path is null then '' else eip4.page_save_path end p5
+	FROM
+		eph_infcenter_pilot eip
+	LEFT JOIN eph_infcenter_pilot eip1 ON eip1.parent_id = eip.id
+	LEFT JOIN eph_infcenter_pilot eip2 ON eip2.parent_id = eip1.id
+	LEFT JOIN eph_infcenter_pilot eip3 ON eip3.parent_id = eip2.id
+	LEFT JOIN eph_infcenter_pilot eip4 ON eip4.parent_id = eip3.id
+	WHERE eip.id = #{websiteId,jdbcType=INTEGER}
+	AND eip1.id =  #{firstLevelId,jdbcType=INTEGER}
+	AND eip2.id =  #{secondLevelId,jdbcType=INTEGER}
+	<if test="thirdLevelId != null" >
+		AND eip3.id =  #{thirdLevelId,jdbcType=INTEGER}
+	</if>
+	<if test="fourthLevelId != null" >
+		AND eip4.id =  #{fourthLevelId,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+  
+  <!-- 根据ID=8公司动态，获取前5条新闻 ，开启缓存-->
+  <resultMap id="newsReultMap" type="com.yph.infcenter.entity.InfcenterInformation" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="title" property="title" jdbcType="VARCHAR" />
+	    <result column="text" property="text" jdbcType="VARCHAR" />
+	    <result column="indexUrl" property="indexUrl" jdbcType="VARCHAR" />
+	    <result column="operateTime" property="operateTime" jdbcType="VARCHAR" />
+	    <result column="secondLevelId" property="secondLevelId" jdbcType="VARCHAR" />
+	    <result column="describition" property="describition" jdbcType="VARCHAR" />
+	  </resultMap>
+  <select id="findNewsInfomationById" parameterType="com.yph.infcenter.entity.InfcenterInformation" resultMap="newsReultMap" useCache="true">
+  	SELECT
+		eii.id,
+		eii.title,
+		eii.indexUrl,
+		eii.operate_time operateTime,
+		eii.second_level_id secondLevelId,
+		eii.describition
+		FROM
+			eph_infcenter_information eii
+		where 1=1 and eii.is_effective=1
+		<if test="rowNumber != null" >
+		 and  eii.second_level_id=${secondLevelId}
+		</if>
+		<if test="isIndex != null" >
+		  and eii.isIndex=${isIndex}
+		</if>
+		 order by eii.is_top desc,eii.operate_time desc 
+		<if test="rowNumber != null" >
+		   LIMIT ${rowNumber}
+        </if>
+  </select>
+  
+  <!-- 得到所有的新闻根据二级 -->
+  <select id="findNewsInfomationByPage"  parameterType="hashmap" resultMap="newsReultMap">
+      SELECT
+		eii.id,
+		eii.title,
+		eii.operate_time operateTime
+		FROM
+			eph_infcenter_information eii
+		where 1=1 and eii.is_effective=1
+		<if test="secondLevelId != null" >
+		 and  eii.second_level_id=#{secondLevelId}
+		</if>
+		order by eii.is_top desc,eii.operate_time desc 
+		limit #{startIndex},#{pageSize}
+  </select>
+  <select id="findNewsInfomationByPageCount"  parameterType="hashmap" resultType="long">
+      SELECT
+		count(1)
+		FROM
+			eph_infcenter_information eii
+		where 1=1 and eii.is_effective=1
+		<if test="secondLevelId != null" >
+		 and  eii.second_level_id=#{secondLevelId}
+		</if>
+		 order by eii.is_top desc,eii.operate_time desc 
+  </select>
+  <!-- 根据id取得新闻详情信息 -->
+  <resultMap id="newsDetailReultMap" type="com.yph.infcenter.entity.InfcenterInformation" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="title" property="title" jdbcType="VARCHAR" />
+	    <result column="text" property="text" jdbcType="VARCHAR" />
+	    <result column="indexUrl" property="indexUrl" jdbcType="VARCHAR" />
+	    <result column="operateTime" property="operateTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="findNewsDetailInfomationById" parameterType="int" resultMap="newsDetailReultMap">
+  	select a.id,a.title,a.text,a.indexUrl,a.operate_time operateTime from eph_infcenter_information a 
+  	where 1=1 and a.is_effective=1
+  	<if test="id != null" >
+  		and a.id=#{id}
+  	</if>
+  	<if test="secondLevelId != null" >
+  		and a.second_level_id=#{secondLevelId}
+  	</if>
+  	ORDER BY a.operate_time LIMIT 1
+  </select>
+</mapper>

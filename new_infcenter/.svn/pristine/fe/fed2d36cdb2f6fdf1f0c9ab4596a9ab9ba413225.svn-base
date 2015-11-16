@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	
+	<!-- 每小时将没有同步成功的数据，重新同步一次 -->
+	<bean id="syncCrmDataToCoreSystemJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="syncCrmDataToCoreSystemJob"/>
+		</property>
+		<property name="targetMethod">
+			<value>resynchronizationData</value>
+		</property>
+	</bean>
+	<bean id="syncCrmDataToCoreSystemJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="syncCrmDataToCoreSystemJobDetail"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 0/1 * * ?</value> <!--  每小时执行一次 0 0 0/1 * * ? -->
+		</property>
+	</bean>
+	<bean id="schedulerFactoryBeanSendMsg" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+			    <ref bean="syncCrmDataToCoreSystemJobTrigger"/>
+			</list>
+		</property>
+	</bean>
+</beans>

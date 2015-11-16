@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yph.infcenter.mapper.InfcenterNoticeMapper">	
+	<!-- 间隔24小时刷新一次 -->
+	<cache type="PERPETUAL" eviction="LRU" flushInterval="86400000" readOnly="true" size="4096"/>
+	
+	  <!-- 信息栏目分页列表查询条件 -->
+  	  <sql id="dynamicPageWhere">
+  	  	<if test="title != null and title != '' ">
+	       	and n.title = #{title}
+	    </if>
+	  	<if test="websiteId != null and websiteId != '' ">
+	       	and n.website_id = #{websiteId}
+	    </if>
+	    <if test="isEffective != null and isEffective != '' ">
+	       	and n.is_effective = #{isEffective}
+	    </if>	    
+	    <if test="beginTimeBegin != null and beginTimeBegin != '' ">
+	    	<![CDATA[and n.begin_time >= CONCAT(#{beginTimeBegin},' 00:00:00') ]]>
+	    </if>
+	    <if test="beginTimeEnd != null and beginTimeEnd != '' ">
+	    	<![CDATA[and n.begin_time <= CONCAT(#{beginTimeEnd},' 23:59:59') ]]>
+	    </if>
+	    <if test="endTimeBegin != null and endTimeBegin != '' ">
+	    	<![CDATA[and n.end_time >= CONCAT(#{endTimeBegin},' 00:00:00') ]]>
+	    </if>
+	    <if test="endTimeEnd != null and endTimeEnd != '' ">
+	    	<![CDATA[and n.end_time <= CONCAT(#{endTimeEnd},' 23:59:59') ]]>
+	    </if>	    	    	   	    	      
+  	  </sql>
+	
+	  <!-- 分页查询信息栏目列表 -->
+	  <select id="findAllRetMapByPage" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			n.id,
+			n.title,
+			eiw.column_zh_name website_id ,
+			n.begin_time,
+			n.create_time,
+			eie.name operator,
+			n.operate_time,
+			n.end_time,
+			n.is_top,
+			n.is_effective,
+			n.text
+		FROM
+			eph_infcenter_notice n
+		INNER JOIN eph_public_employee eie ON eie.employee_id = n.operator
+		INNER JOIN eph_infcenter_pilot eiw on eiw.id = n.website_id
+		where 1 = 1
+		<include refid="dynamicPageWhere"/>
+		order by n.is_top desc,n.create_time desc
+		limit #{startIndex},#{pageSize}
+	  </select>
+	
+	  <!-- 信息栏目列表分页总数 -->  
+	  <select id="findAllByPageCount" resultType="long" parameterType="hashmap">
+	  	SELECT 
+	  		count(n.id) 
+	  	FROM eph_infcenter_notice n
+	  	INNER JOIN eph_public_employee eie ON eie.employee_id = n.operator
+	  	INNER JOIN eph_infcenter_pilot eiw on eiw.id = n.website_id
+		WHERE 1 = 1
+		<include refid="dynamicPageWhere"/>
+	  </select>
+	
+	  <insert id="insertSelective" parameterType="com.yph.infcenter.entity.InfcenterNotice" useGeneratedKeys="true" keyProperty="id">
+    	insert into eph_infcenter_notice
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        id,
+	      </if>
+	      <if test="title != null" >
+	        title,
+	      </if>
+	      <if test="text != null" >
+	        text,
+	      </if>
+	      <if test="websiteId != null" >
+	        website_id,
+	      </if>
+	      <if test="beginTime != null" >
+	        begin_time,
+	      </if>
+	      <if test="createTime != null" >
+	        create_time,
+	      </if>
+	      <if test="operator != null" >
+	        operator,
+	      </if>      
+	      <if test="operateTime != null" >
+	        operate_time,
+	      </if>   
+	      <if test="endTime != null" >
+	        end_time,
+	      </if>
+	      <if test="isEffective != null" >
+	        is_effective,
+	      </if>
+	      <if test="isTop != null" >
+	        is_top,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        #{id,jdbcType=INTEGER},
+	      </if>
+	      <if test="title != null" >
+	        #{title,jdbcType=VARCHAR},
+	      </if>
+	      <if test="text != null" >
+	        #{text,jdbcType=VARCHAR},
+	      </if>
+	      <if test="websiteId != null" >
+	        #{websiteId,jdbcType=INTEGER},
+	      </if>
+	      <if test="beginTime != null" >
+	        #{beginTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="createTime != null" >
+	        #{createTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="operator != null" >
+	        #{operator,jdbcType=INTEGER},
+	      </if>      
+	      <if test="operateTime != null" >
+	        #{operateTime,jdbcType=TIMESTAMP},
+	      </if>      
+	      <if test="endTime != null" >
+	        #{endTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="isEffective != null" >
+	        #{isEffective,jdbcType=CHAR},
+	      </if>
+	      <if test="isTop != null" >
+	        #{isTop,jdbcType=CHAR},
+	      </if>     
+	    </trim>
+  	  </insert>
+  	  
+      <update id="updateByPrimaryKeySelective" parameterType="com.yph.infcenter.entity.InfcenterNotice" >
+	    update eph_infcenter_notice
+	    <set>
+	      <if test="title != null" >
+	        title = #{title,jdbcType=VARCHAR},
+	      </if>
+	       <if test="text != null" >
+	        text = #{text,jdbcType=VARCHAR},
+	      </if>
+	      <if test="websiteId != null" >
+	        website_id = #{websiteId,jdbcType=INTEGER},
+	      </if>
+	      <if test="beginTime != null" >
+	        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="createTime != null" >
+	        create_time = #{createTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="operator != null" >
+	        operator = #{operator,jdbcType=INTEGER},
+	      </if>     
+	      <if test="operateTime != null" >
+	        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+	      </if>            
+	      <if test="endTime != null" >
+	        end_time = #{endTime,jdbcType=TIMESTAMP },
+	      </if>
+	      <if test="isEffective != null" >
+	        is_effective = #{isEffective,jdbcType=CHAR},
+	      </if>
+	       <if test="isTop != null" >
+	        is_top = #{isTop,jdbcType=CHAR},
+	      </if>
+	    </set>
+	    where id = #{id,jdbcType=INTEGER}
+      </update>
+	  
+	  <!-- 查看信息栏目,返回map类型 -->
+	  <select id="selectRetMapByPrimaryKey" parameterType="java.lang.Integer" resultType="hashmap">
+	   SELECT
+			n.id,
+			n.title,
+			n.text,
+			n.website_id,
+			n.begin_time,
+			n.create_time,
+			eie.name operator,
+			n.operate_time,
+			n.end_time,
+			n.is_effective,
+			n.is_top
+		FROM
+			eph_infcenter_notice n
+		INNER JOIN eph_public_employee eie ON eie.employee_id = n.operator
+		INNER JOIN eph_infcenter_pilot eiw on eiw.id = n.website_id
+	    WHERE n.id = #{id,jdbcType=INTEGER}
+	  </select>
+	  
+	  <!-- 获取站点公告 -->
+	  <select id="findAllRetMapNoPage" resultType="hashmap" parameterType="hashmap">
+	  	SELECT
+			notice_inf noticeInfo
+		FROM
+			eph_infcenter_notice
+		WHERE
+			website_id = #{websiteId}
+			and #{nowDate} BETWEEN begin_time and end_time
+	  </select>
+	  
+	  <update id="updateNoticeIsTop" parameterType="hashmap">
+	  	update eph_infcenter_notice
+	  	<set>
+	      <if test="title != null" >
+	        title = #{title,jdbcType=VARCHAR},
+	      </if>
+	       <if test="text != null" >
+	        text = #{text,jdbcType=VARCHAR},
+	      </if>
+	      <if test="websiteId != null" >
+	        website_id = #{websiteId,jdbcType=INTEGER},
+	      </if>
+	      <if test="beginTime != null" >
+	        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="createTime != null" >
+	        create_time = #{createTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="operator != null" >
+	        operator = #{operator,jdbcType=INTEGER},
+	      </if>     
+	      <if test="operateTime != null" >
+	        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+	      </if>            
+	      <if test="endTime != null" >
+	        end_time = #{endTime,jdbcType=TIMESTAMP },
+	      </if>
+	      <if test="isEffective != null" >
+	        is_effective = #{isEffective,jdbcType=CHAR},
+	      </if>
+	       <if test="isTop != null" >
+	        is_top = #{isTop,jdbcType=CHAR},
+	      </if>
+	    </set>
+	  </update>
+	  
+	  <!-- 150728 新增官网公告 begin -->
+	  <!-- 首页公告 -->
+	  <select id="findNoticeOfHomeForOnline" parameterType="int" resultType="map" useCache="true">
+	  	SELECT
+			ein.id,ein.title,ein.begin_time,ein.end_time,ein.create_time
+		FROM
+			eph_infcenter_notice ein
+		WHERE
+			ein.is_effective = '1'
+			AND ein.website_id = #{websiteId,jdbcType=INTEGER}
+			ORDER BY ein.is_top desc,ein.operate_time desc
+			LIMIT 1
+	  </select>
+	  <!-- 更多列表页、公告列表 -->
+	  <select id="findNoticeForOnlineByPage" parameterType="com.yph.infcenter.entity.InfcenterNotice" resultType="map" useCache="true">
+	  	SELECT
+			ein.id,ein.title,ein.create_time,ein.operate_time
+		FROM
+			eph_infcenter_notice ein
+		WHERE
+			ein.is_effective = '1'
+			AND ein.website_id = #{websiteId,jdbcType=INTEGER}
+			ORDER BY ein.is_top desc,ein.operate_time desc
+			LIMIT #{pageNo},#{pageSize}
+	  </select>
+	  
+	  <select id="findNoticeForOnlineByPageCount" parameterType="com.yph.infcenter.entity.InfcenterNotice" resultType="long" useCache="true">
+	  	SELECT
+			count(ein.id)
+		FROM
+			eph_infcenter_notice ein
+		WHERE
+			ein.is_effective = '1'
+			AND ein.website_id = #{websiteId,jdbcType=INTEGER}
+	  </select>
+	  <!-- 公告详情页 -->
+	  <select id="findNoticeDetailById" 	 parameterType="int" resultType="map" useCache="true">
+	  	SELECT
+			ein.title,ein.text,ein.begin_time,ein.end_time,ein.create_time,ein.operate_time
+		FROM
+			eph_infcenter_notice ein
+		WHERE
+			ein.is_effective = '1'
+		  and ein.id = #{id,jdbcType=INTEGER}
+	  </select>
+	  <!-- 150728 新增官网公告 end -->
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+	 http://cxf.apache.org/jaxws  
+     http://cxf.apache.org/schemas/jaxws.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     http://www.springframework.org/schema/task  http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+
+    <!-- 导入与CXF框架有关的xml -->                       
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+    
+    <!--发布服务器端webservice接口  -->
+    <!-- 注意这个配置implementorClass就是配置这个service的interface，然后implementor就是去引用Spring容器中的CrmCustomerBusinessImpl这个bean，这样配置，就能在webservice的实现service中注入service、dao了。  -->
+	<!--<jaxws:endpoint id="cxfCoreCustomerBusiness" implementorClass="com.dafy.crm.webservice.cxf.core.CrmCoreCustomerBusiness" implementor="#crmCoreCustomerBusiness" address="/crmCoreCustomerBusiness" />
+	<jaxws:endpoint id="cxfCoreInvestBusiness" implementorClass="com.dafy.crm.webservice.cxf.core.CrmCoreInvestBusiness" implementor="#crmCoreInvestBusiness" address="/crmCoreInvestBusiness" /> 
+
+	<jaxws:client id="crmSynService" serviceClass="com.dafy.crmService.cxf.webService.CRMSynService" address="${coreCrmBusiness}" />
+	-->
+	<bean id="publishNewsByOnline" class="com.yph.infcenter.cxf.webservice.impl.PublishNewsByOnlineImpl" />
+	<jaxws:server id="newsWebservice" serviceClass="com.yph.infcenter.cxf.webservice.PublishNewsByOnline" address="/news">
+		<jaxws:serviceBean>
+			 要暴露的 bean 的引用 
+			<ref bean="publishNewsByOnline" />
+		</jaxws:serviceBean>
+	</jaxws:server>
+	
+<!--	<bean id="publishInterfaceOfOnline" class="com.yph.infcenter.cxf.webservice.impl.PublishInterfaceOfOnlineImpl" />-->
+<!--	<jaxws:server id="interfaceOfOnlineWebService" serviceClass="com.yph.infcenter.cxf.webservice.PublishInterfaceOfOnline" address="/news">-->
+<!--		<jaxws:serviceBean>-->
+<!--			<ref bean="publishInterfaceOfOnline" />-->
+<!--		</jaxws:serviceBean>-->
+<!--	</jaxws:server>-->
+	
+</beans>

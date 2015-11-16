@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>亿谱汇动态详细页</title>
+<link rel="stylesheet" type="text/css" href="${column_url}/offwebsite/css/style.css" />
+</head>
+
+<body>
+<div class="top">
+  <div class="logo"><a href="index.html"><img src="${column_url}/offwebsite/images/logo.jpg" width="187" height="58" /></a></div>
+  <!--top中的电话和微博位置-->
+  <div class="top_photo_tubiao">
+    <div class="t_phone"></div>
+    <div class="t_right"><a href="#" class="gfwb">官方微博</a><a href="#" class="jrsc">加入收藏</a></div>
+  </div>
+  <!--end top中的电话和微博位置-->
+</div>
+<div class="cont_b">
+<div class="er_nav">
+  <ul>
+    <li><a href="index.html">首页</a></li>
+    #foreach($firstPilotEntity in $firstPilot)
+		#if($firstPilotEntity.get("highlight") == "1")
+			<li class="current"><a href="$firstPilotEntity.get('url')">$firstPilotEntity.get("column_zh_name")</a></li>	
+		#else
+			<li><a href="$firstPilotEntity.get('url')">$firstPilotEntity.get("column_zh_name")</a></li>	
+		#end
+    #end
+  </ul>
+</div>
+<div class="er_banner"><img src="${column_url}/offwebsite/images/dfdt.jpg" width="962" height="228" /></div>
+</div>
+
+<div class="main">
+  <div class="main_left">
+    <ul>
+      <li class="t1">
+      	<span>
+      		#if($page_zh_title)
+      			${page_zh_title}
+      		#end
+      	</span>
+      	<b>
+      		#if($page_en_title)
+      			${page_en_title}
+      		#end
+      	</b>
+      </li>
+      #foreach($secondPilotEntity in $secondPilot)
+		#if($secondPilotEntity.get("highlight") == "1")
+			<li class="t2"><a href="$secondPilotEntity.get('url')" class="cur">$secondPilotEntity.get("zh_name")</a></li>
+		#else
+		    <li class="t2"><a href="$secondPilotEntity.get('url')">$secondPilotEntity.get("zh_name")</a></li>
+		#end
+      #end
+    </ul>
+    <div class="clear"></div>
+  </div>
+  <div class="main_right">
+    <h2>
+    	#if($content_title)
+      		${content_title}
+      	#end
+    </h2>
+    <div class="news_r">
+      <h2>
+      	#if($title)
+      		${title}
+      	#end
+      </h2>
+      <p class="news_txt_two">
+    	#if($information_sources)
+      		来源：${information_sources}
+      	#end
+      	&nbsp;&nbsp;&nbsp;&nbsp;
+      	#if($publish_time)
+      		发布时间：${publish_time}
+      	#end
+      </p>
+      <div class="news_con_box" >
+      	${text}
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+   <div class="clear"></div>
+</div>
+
+<div class="bottom">
+  <div class="foot">
+    <div class="b_left">
+          <a href="map.html">网站地图</a> | <a href="intro.html">关于我们</a> | <a href="job.html">加入我们</a> | <a href="contact.html">联系我们</a><br />
+      版权所有：亿谱汇财富投资管理（北京）有限公司<br />
+      备案序号：京ICP备14056170号
+
+    </div>
+    <div class="b_right">
+      <p><img src="${column_url}/offwebsite/images/b_cont.jpg"  /></p>
+      <a href="#" ><img src="${column_url}/offwebsite/images/b_kf.jpg" /></a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+#dev env config
+#tomcat attachment path
+#附件上传路径
+attachmentPath=D\:\\apache-tomcat-6.0.26\\webapps
+
+#附件访问路径
+attachmentAccessPath=http\://192.168.0.124\:8080
+
+
+
+

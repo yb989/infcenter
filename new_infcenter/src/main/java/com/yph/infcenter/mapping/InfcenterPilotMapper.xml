@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yph.infcenter.mapper.InfcenterPilotMapper">
+
+	<resultMap id="BaseResultMap" type="com.yph.infcenter.entity.InfcenterPilot">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="column_zh_name" property="columnZhName" jdbcType="VARCHAR" />
+		<result column="column_en_name" property="columnEnName" jdbcType="VARCHAR" />
+		<result column="column_url" property="columnUrl" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="column_sort" property="columnSort" jdbcType="INTEGER" />
+		<result column="is_effective" property="isEffective" jdbcType="CHAR" />
+		<result column="operator" property="operator" jdbcType="INTEGER" />
+		<result column="operate_time" property="operatorTime" jdbcType="TIMESTAMP" />
+		<result column="page_save_path" property="pageSavePath" jdbcType="VARCHAR" />
+		<result column="velocity_name" property="velocityName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 查询站点的根导航-->
+	<select id="queryFirstPilot" parameterType="hashmap" resultType="hashmap">
+		SELECT
+		eic.column_zh_name,
+		eic.column_url url,
+		eic.column_en_name,
+		CASE
+		WHEN eic.id = #{first_column_id} THEN
+		1
+		ELSE
+		0
+		END highlight
+		FROM
+		eph_infcenter_pilot eic
+		WHERE
+		eic.parent_id = #{website_id}
+		order by eic.column_sort
+	  </select>
+
+	<!-- 查询站点的子导航-->
+	<select id="queryDirectionPilot" parameterType="hashmap"
+		resultType="hashmap">
+		SELECT
+		eic.column_zh_name zh_name,
+		eic.column_url url,
+		eic.column_en_name en_name,
+		CASE
+		WHEN eic.id = #{column_id} THEN
+		1
+		ELSE
+		0
+		END highlight
+		FROM
+		eph_infcenter_pilot eic
+		WHERE
+		eic.parent_id = (
+		SELECT
+		parent_id
+		FROM
+		eph_infcenter_pilot eic1
+		WHERE
+		eic1.id = #{column_id}
+		)
+		AND eic.is_effective != 0
+		ORDER BY
+		eic.column_sort
+	  </select>
+
+	<!-- 获取网点最大排列数 -->
+	<select id="getMaxFirstPilot" parameterType="int" resultType="java.lang.Integer">
+		select max(column_sort) from eph_infcenter_pilot where
+		parent_id = #{parentId}
+	  </select>
+
+	<!-- 新增站点信息或导航栏目信息 -->
+	<insert id="insertPilot" parameterType="hashmap">
+		insert into eph_infcenter_pilot
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+	        </if>
+			<if test="column_zh_name != null">
+				column_zh_name,
+	        </if>
+			<if test="column_en_name != null">
+				column_en_name,
+	        </if>
+			<if test="column_url != null">
+				column_url,
+	        </if>
+			<if test="parent_id != null">
+				parent_id,
+	        </if>
+			<if test="column_sort != null">
+				column_sort,
+	        </if>
+			<if test="is_effective != null">
+				is_effective,
+	        </if>
+			<if test="operator != null">
+				operator,
+	      </if>
+			<if test="operate_time != null">
+				operate_time,
+	      </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+	      </if>
+			<if test="column_zh_name != null">
+				#{column_zh_name,jdbcType=VARCHAR},
+	      </if>
+			<if test="column_en_name != null">
+				#{column_en_name,jdbcType=VARCHAR},
+	      </if>
+			<if test="column_url != null">
+				#{column_url,jdbcType=VARCHAR},
+	      </if>
+			<if test="parent_id != null">
+				#{parent_id,jdbcType=INTEGER},
+	      </if>
+			<if test="column_sort != null">
+				#{column_sort,jdbcType=INTEGER},
+	      </if>
+			<if test="is_effective != null">
+				#{is_effective,jdbcType=CHAR},
+	      </if>
+			<if test="operator != null">
+				#{operator,jdbcType=INTEGER},
+	      </if>
+			<if test="operate_time != null">
+				#{operate_time,jdbcType=TIMESTAMP},
+	      </if>
+		</trim>
+	</insert>
+
+	<!--查询一级菜单 -->
+	<select id="findFirstPilotInfo" resultType="hashmap"
+		parameterType="hashmap">
+		SELECT
+		eii.id id,
+		eii.column_zh_name
+		FROM
+		eph_infcenter_pilot eii
+		where eii.parent_id = 0
+	  </select>
+
+	<!--查询级联菜单 -->
+	<select id="findSubWorkPilotInfoById" resultType="hashmap"
+		parameterType="int">
+		SELECT
+		eii.id id,
+		eii.column_zh_name
+		FROM
+		eph_infcenter_pilot eii
+		WHERE eii.parent_id = #{id} order by eii.id asc
+	  </select>
+
+	<!--根据主键查询站点模块信息 -->
+	<select id="findVelocityById" resultType="hashmap"
+		parameterType="int">
+		select velocity_name from eph_infcenter_pilot WHERE id =
+		#{id}
+	  </select>
+
+    <!-- 根据中文名称查询主键ID -->
+	  <select id="findIdByIdColumnZhName" resultType="int" parameterType="string">
+		select eip.id from eph_infcenter_pilot eip where eip.column_zh_name = #{name,jdbcType=VARCHAR}
+	  </select>
+	  
+	<!-- 查询所有栏目信息 -->
+	<select id="queryPilots" resultType="hashmap">
+		SELECT
+		id,
+		column_zh_name,
+		column_en_name,
+		velocity_name,
+		column_url,
+		parent_id,
+		column_sort,
+		page_save_path,
+		is_effective
+		FROM
+		eph_infcenter_pilot
+		order by column_sort asc,id asc 
+	  </select>
+	 
+	 <!-- 通过Id查询栏目站点信息 -->
+	 <sql id="Base_Column_List" >
+    	id, column_zh_name, column_en_name, velocity_name,page_save_path , column_url, parent_id, column_sort, is_effective
+  	</sql>
+  	<select id="queryByIdPilot" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    	select 
+    <include refid="Base_Column_List" />
+    	from eph_infcenter_pilot
+    	where id = #{id,jdbcType=INTEGER}
+  	</select>
+
+	<!-- 修改栏目站点信息 -->
+	<update id="updateByPrimaryKeySelective"  parameterType="com.yph.infcenter.entity.InfcenterPilot">
+		update eph_infcenter_pilot
+		<set>
+	     <if test="columnZhName != null">
+				column_zh_name = #{columnZhName,jdbcType=VARCHAR},
+	     </if>
+		 <if test="columnEnName != null">
+				column_en_name = #{columnEnName,jdbcType=VARCHAR},
+	     </if>
+			<if test="columnUrl != null">
+				column_url = #{columnUrl,jdbcType=VARCHAR},
+	     </if>
+			<if test="velocityName != null">
+				velocity_name = #{velocityName,jdbcType=VARCHAR},
+	     </if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=INTEGER},
+	     </if>
+	     <if test="pageSavePath != null">
+				page_save_path = #{pageSavePath,jdbcType=VARCHAR},
+	     </if>
+			<if test="columnSort != null">
+				column_sort = #{columnSort,jdbcType=INTEGER},
+	     </if>
+			<if test="isEffective != null">
+				is_effective = #{isEffective,jdbcType=INTEGER},
+	     </if>
+			<if test="operator != null">
+				operator = #{operator,jdbcType=INTEGER},
+	     </if>
+			<if test="operateTime != null">
+				operate_time = #{operateTime,jdbcType=TIMESTAMP},
+	     </if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 增加栏目站点信息 -->
+	<insert id="insertSelectivePolit" parameterType="com.yph.infcenter.entity.InfcenterPilot">
+		insert into eph_infcenter_pilot
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+	        </if>
+			<if test="columnZhName != null">
+				column_zh_name,
+	        </if>
+			<if test="columnEnName != null">
+				column_en_name,
+	        </if>
+			<if test="columnUrl != null">
+				column_url,
+	        </if>
+			<if test="velocityName != null">
+				velocity_name,
+	        </if>
+			<if test="parentId != null">
+				parent_id,
+	        </if>
+			<if test="columnSort != null">
+				column_sort,
+	        </if>
+			<if test="isEffective != null">
+				is_effective,
+	        </if>
+	        <if test="pageSavePath != null">
+				page_save_path,
+	        </if>
+			<if test="operator != null">
+				operator,
+	        </if>
+			<if test="operateTime != null">
+				operate_time,
+	        </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+	        </if>
+			<if test="columnZhName != null">
+				#{columnZhName,jdbcType=VARCHAR},
+	        </if>
+	        <if test="columnEnName != null">
+				#{columnEnName,jdbcType=VARCHAR},
+	        </if>
+			<if test="columnUrl != null">
+				#{columnUrl,jdbcType=VARCHAR},
+	        </if>
+			<if test="velocityName != null">
+				#{velocityName,jdbcType=VARCHAR},
+	        </if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=INTEGER},
+	        </if>
+			<if test="columnSort != null">
+				#{columnSort,jdbcType=INTEGER},
+	        </if>
+			<if test="isEffective != null">
+				#{isEffective,jdbcType=INTEGER},
+	        </if>
+	        <if test="pageSavePath != null">
+				#{pageSavePath,jdbcType=VARCHAR},
+	        </if>
+			<if test="operator != null">
+				#{operator,jdbcType=INTEGER},
+	        </if>
+			<if test="operateTime != null">
+				#{operateTime,jdbcType=TIMESTAMP},
+	        </if>
+		</trim>
+	</insert>
+	
+	<!-- 删除栏目站点信息 -->
+	<delete id="deleteInfcenterPilot" parameterType="int">
+		delete from  eph_infcenter_pilot where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<select id="findIdByZhName" resultType="int" parameterType="String">
+		select id from eph_infcenter_pilot where column_zh_name = #{zhName,jdbcType=VARCHAR}
+	</select>
+	
+	
+	 <!-- 根据ID查询站点路径 -->
+	  <select id="findPilotById" parameterType="int" resultType="hashmap">
+	  	select c.id id1,b.id id2,a.id id3,c.column_url,CONCAT(c.page_save_path,b.page_save_path,a.page_save_path) as savePath from eph_infcenter_pilot a 
+	  	LEFT JOIN eph_infcenter_pilot b on b.id=a.parent_id 
+	  	left join eph_infcenter_pilot c on c.id=b.parent_id where a.id=#{id}
+	  </select>
+	  
+	  <!-- 查询站点的根导航-->
+	  <resultMap id="menuMap" type="com.yph.infcenter.entity.InfcenterPilot">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="column_zh_name" property="columnZhName" jdbcType="VARCHAR" />
+		<result column="column_en_name" property="columnEnName" jdbcType="VARCHAR" />
+		<result column="column_url" property="columnUrl" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="queryFirstMenu" parameterType="hashmap" resultMap="menuMap">
+		SELECT
+		eic.id,
+		eic.column_zh_name ,
+		eic.column_url,
+		eic.column_en_name,
+		eic.parent_id
+		FROM
+		eph_infcenter_pilot eic
+		WHERE 1=1 and eic.is_effective=1
+		<if test="website_id != null">
+		eic.parent_id = #{website_id}
+		</if>
+		order by eic.column_sort
+	  </select>
+	  
+	  <select id="queryMenuSort" parameterType="hashmap" resultType="hashmap">
+	      select a.id,a.column_sort as sort from eph_infcenter_pilot a where a.parent_id=#{parentId} and a.column_sort &lt; #{sort} ORDER BY a.column_sort desc LIMIT 1
+	  </select>
+	  
+	  <select id="queryMenuSortByDown" parameterType="hashmap" resultType="hashmap">
+	      select a.id,a.column_sort as sort from eph_infcenter_pilot a where a.parent_id=#{parentId} and a.column_sort &gt; #{sort} ORDER BY a.column_sort asc LIMIT 1
+	  </select>
+</mapper>

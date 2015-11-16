@@ -1,0 +1,63 @@
+# Global logging configuration
+log4j.rootLogger=DEBUG,stdout
+
+#log4j.logger.java.sql.ResultSet=INFO
+# SqlMap logging configuration...
+log4j.logger.com.ibatis=DEBUG
+log4j.logger.com.ibatis.common.jdbc.SimpleDataSource=DEBUG
+log4j.logger.com.ibatis.common.jdbc.ScriptRunner=DEBUG
+log4j.logger.com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate=DEBUG
+log4j.logger.java.sql.Connection=DEBUG
+log4j.logger.java.sql.Statement=DEBUG
+log4j.logger.java.sql.PreparedStatement=DEBUG
+log4j.logger.java.sql.ResultSet=DEBUG
+
+# Console output...
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern==%-d{yyyy-MM-dd HH:mm:ss.S} %-5p %20c %3x - %m%n
+
+#setting for appender A1
+log4j.appender.A1=org.apache.log4j.ConsoleAppender
+log4j.appender.A1.layout=org.apache.log4j.PatternLayout
+log4j.appender.A1.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss.S} %-5p %20c %3x - %m%n
+
+
+
+# The below list is option of ConversionPattern when the value of layout is PatternLayout:
+# %r : millisecond was expended after program run
+# %t : thread was requested by log
+# %p : piroirty of log sentence
+# %r : sort name of relational log request
+# %c : class name where include the log information
+# %m%n : content of log information
+# %x : space (%5x equal to five spaces)
+
+
+#setting for appender A2
+log4j.appender.A2=org.apache.log4j.RollingFileAppender
+log4j.appender.A2.File=logs/log.log
+log4j.appender.A2.MaxFileSize=500KB
+log4j.appender.A2.MaxBackupIndex=1
+log4j.appender.D.Append=true
+log4j.appender.D.Threshold=DEBUG 
+log4j.appender.A2.layout=org.apache.log4j.PatternLayout
+log4j.appender.A2.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss.S} %-5p %20c %3x - %m%n
+
+
+log4j.appender.A3=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.A3.File=logs/dafeidai_daily_log
+#log4j.appender.A3.Encoding=UTF-8
+#log4j.appender.A3.Threshold=DEBUG
+log4j.appender.A3.DatePattern='.'yyyy-MM-dd
+log4j.appender.A3.layout=org.apache.log4j.PatternLayout
+log4j.appender.A3.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss.S} %-5p %20c %3x - %m%n
+
+#
+#log4j.logger.com.dafy.dfd.cxf.webservice=DEBUG,webservice
+#log4j.appender.webservice=org.apache.log4j.RollingFileAppender
+#log4j.appender.webservice.File=D\:log/firstlog4j.log
+#log4j.appender.webservice.MaxFileSize=500KB
+#log4j.appender.webservice.MaxBackupIndex=1
+#log4j.appender.webservice.layout=org.apache.log4j.PatternLayout
+#log4j.appender.webservice.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss.S} %-5p %20c %3x - %m%n
