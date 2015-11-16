@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yph.infcenter.common.util.DataMsg;
 import com.yph.infcenter.entity.InfcenterPilot;
 import com.yph.infcenter.service.InfcenterPilotService;
-
+       
 @Controller
 @RequestMapping("/pilot")
 public class InfcenterPilotController extends BaseController{

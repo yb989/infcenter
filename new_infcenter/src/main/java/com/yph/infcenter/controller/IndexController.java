@@ -20,7 +20,7 @@ import com.yph.infcenter.entity.InfcenterInformation;
 import com.yph.infcenter.service.InfcenterInformationService;
 
 /**
- * @author bin  
+ * @author bin         
  * 
  */
 @Controller
